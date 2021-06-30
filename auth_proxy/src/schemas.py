@@ -9,11 +9,12 @@ class ProfileSchema(BaseModel):
     email: str
     first_name: str
     last_name: str
+    password: str
 
     class Config:
         orm_mode = True
 
 
 class LoginSchema(BaseModel):
-    login: str
+    username: str
     password: str
