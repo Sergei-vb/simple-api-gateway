@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import Column, Integer, JSON, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy_utils import PasswordType
@@ -26,5 +28,5 @@ class Profile(Base):
 class Session(Base):
     __tablename__ = 'session'
 
-    session_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, unique=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     payload = Column(JSON(), nullable=False)

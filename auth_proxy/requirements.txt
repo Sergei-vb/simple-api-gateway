@@ -3,3 +3,6 @@ uvicorn[standard]==0.14.0
 SQLAlchemy==1.4.20
 sqlalchemy-utils==0.37.8
 alembic==1.6.5
+psycopg2==2.8.6
+asyncpg==0.22.0
+passlib==1.7.4

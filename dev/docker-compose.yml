@@ -1,0 +1,47 @@
+version: "3.7"
+services:
+  auth_proxy_service:
+    build:
+      context: ../auth_proxy/
+    container_name: auth_proxy_container
+    environment:
+      - DB_NAME=auth
+      - DB_USER=developer
+      - DB_PASSWORD=123
+      - DB_HOST=db_service
+      - DB_PORT=5432
+      - RELOAD=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../auth_proxy/:/usr/src/app
+    depends_on:
+      - db_service
+    networks:
+      - api-gateway
+
+  app_service:
+    build:
+      context: ../app/
+    container_name: app_container
+    ports:
+      - "8001:8000"
+    volumes:
+      - ../app/:/usr/src/app
+    networks:
+      - api-gateway
+
+  db_service:
+    image: postgres:13.2
+    container_name: db_container
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql_scripts/:/docker-entrypoint-initdb.d/
+    networks:
+      - api-gateway
+
+networks:
+  api-gateway:
