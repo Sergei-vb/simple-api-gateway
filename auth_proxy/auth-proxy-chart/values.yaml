@@ -10,9 +10,9 @@ service:
 
 postgresql:
   enabled: true
-  postgresqlUsername: developer
-  postgresqlPassword: 123
-  postgresqlDatabase: auth
+  postgresqlUsername: "developer"
+  postgresqlPassword: "123"
+  postgresqlDatabase: "auth"
   persistence:
     size: 0.1Gi
   service:

@@ -40,6 +40,10 @@ spec:
       containers:
       - name: post-install-job
         image: "auth:0.1.0"  # TODO: dockerhub
+        command:
+          - sh
+          - "-c"
+          - "alembic upgrade head"
         env:
           - name: DB_NAME
             valueFrom:
@@ -58,16 +62,12 @@ spec:
                 key: DB_PASSWORD
           - name: DB_HOST
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 name: {{ include "auth-proxy-chart.fullname" . }}-secret
                 key: DB_HOST
           - name: DB_PORT
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 name: {{ include "auth-proxy-chart.fullname" . }}-secret
                 key: DB_PORT
-          command:
-            - sh
-            - "-c"
-            - "alembic upgrade head"
   backoffLimit: 0
