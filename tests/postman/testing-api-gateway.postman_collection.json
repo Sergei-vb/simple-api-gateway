@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "e84917a1-dd33-4df7-b92a-61593d526837",
+		"name": "testing-api-gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register profile 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"var responseJSON = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"userId1\", responseJSON[\"id\"]);",
+							"pm.collectionVariables.set(\"userUsername1\", responseJSON[\"username\"]);",
+							"pm.collectionVariables.set(\"userEmail1\", responseJSON[\"email\"]);",
+							"pm.collectionVariables.set(\"userFirstName1\", responseJSON[\"first_name\"]);",
+							"pm.collectionVariables.set(\"userLastName1\", responseJSON[\"last_name\"]);",
+							"pm.collectionVariables.set(\"userPassword1\", responseJSON[\"password\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{$randomUserName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"first_name\": \"{{$randomFirstName}}\",\n    \"last_name\": \"{{$randomLastName}}\",\n    \"password\": \"{{$randomPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/register",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if get accessed to edit profile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"check if profile is editable\", function () {",
+							"    pm.expect(pm.response.json()).to.eql({\"detail\": \"Not signed in\"});",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{userUsername1}}\",\n    \"email\": \"{{userEmail1}}\",\n    \"first_name\": \"{{userFirstName1}}\",\n    \"last_name\": \"{{userLastName1}}\",\n    \"password\": \"{{userPassword1}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/edit-profile",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"edit-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if get accessed to show profile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"check if profile is showable\", function () {",
+							"    pm.expect(pm.response.json()).to.eql({\"message\": \"Please go to login and provide Login/Password\"});",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/profile",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login profile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"check if session_id is set\", function () {",
+							"    pm.expect(pm.cookies.has(\"session_id\")).true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{userUsername1}}\",\n    \"password\": \"{{userPassword1}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/login",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit profile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"check if profile is edited\", function () {",
+							"    const responseJSON = pm.response.json();",
+							"    pm.expect(responseJSON.id).to.eql(pm.collectionVariables.get(\"userId1\"));",
+							"    pm.expect(responseJSON.username).to.eql(pm.collectionVariables.get(\"userUsername1\"));",
+							"    pm.expect(responseJSON.email).to.eql(pm.collectionVariables.get(\"userEmail1\"));",
+							"    pm.expect(responseJSON.first_name).to.eql(pm.collectionVariables.get(\"userFirstName1\") + \"-new\");",
+							"    pm.expect(responseJSON.last_name).to.eql(pm.collectionVariables.get(\"userLastName1\") + \"-new-too\");",
+							"    pm.expect(responseJSON.password).to.eql(pm.collectionVariables.get(\"userPassword1\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{userUsername1}}\",\n    \"email\": \"{{userEmail1}}\",\n    \"first_name\": \"{{userFirstName1}}-new\",\n    \"last_name\": \"{{userLastName1}}-new-too\",\n    \"password\": \"{{userPassword1}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/edit-profile",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"edit-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show profile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"check if profile is edited\", function () {",
+							"    const responseJSON = pm.response.json();",
+							"    pm.expect(responseJSON.id).to.eql(pm.collectionVariables.get(\"userId1\"));",
+							"    pm.expect(responseJSON.username).to.eql(pm.collectionVariables.get(\"userUsername1\"));",
+							"    pm.expect(responseJSON.email).to.eql(pm.collectionVariables.get(\"userEmail1\"));",
+							"    pm.expect(responseJSON.first_name).to.eql(pm.collectionVariables.get(\"userFirstName1\") + \"-new\");",
+							"    pm.expect(responseJSON.last_name).to.eql(pm.collectionVariables.get(\"userLastName1\") + \"-new-too\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/profile",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log out",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"check if session_id is set\", function () {",
+							"    pm.expect(pm.cookies.has(\"session_id\")).false;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/logout",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "arch.homework"
+		},
+		{
+			"key": "userId1",
+			"value": ""
+		},
+		{
+			"key": "userUsername1",
+			"value": ""
+		},
+		{
+			"key": "userFirstName1",
+			"value": ""
+		},
+		{
+			"key": "userLastName1",
+			"value": ""
+		},
+		{
+			"key": "userEmail1",
+			"value": ""
+		},
+		{
+			"key": "userPassword1",
+			"value": ""
+		}
+	]
+}

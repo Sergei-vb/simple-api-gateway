@@ -14,3 +14,6 @@ An implementation of the API Gateway microservices pattern. The nginx-ingress co
 * Apply ingress manifests:
   - ```kubectl apply -f auth-proxy-ingress.yaml```  (from root repository)
   - ```kubectl apply -f app-ingress.yaml```  (from root repository)
+
+* Run newman tests:
+  - ```newman run tests/postman/testing-api-gateway.postman_collection.json```
