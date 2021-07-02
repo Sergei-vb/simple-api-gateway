@@ -1,5 +1,8 @@
 # simple-api-gateway
-An implementation of the API Gateway microservices pattern. The nginx-ingress controller is used as the API Gateway.
+An implementation of the API Gateway microservices pattern.
+The nginx-ingress controller is used as the API Gateway.
+
+![schema](./schema.png)
 
 * Create "api-gateway" namespace.
   - ```kubectl create namespace api-gateway```
