@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.appVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           ports:
             - name: http
               containerPort: 8000

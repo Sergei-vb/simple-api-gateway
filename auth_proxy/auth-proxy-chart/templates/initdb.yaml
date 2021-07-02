@@ -39,7 +39,7 @@ spec:
               do echo waiting for database; sleep 2; done;
       containers:
       - name: post-install-job
-        image: "{{ .Values.image.repository }}:{{ .Chart.appVersion }}"
+        image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
         command:
           - sh
           - "-c"
