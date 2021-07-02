@@ -2,7 +2,8 @@ replicaCount: 1
 
 fullnameOverride: "auth"
 
-image: "auth:0.1.0"  # TODO: dockerhub
+image:
+  repository: sergeivb/simple-api-gateway-auth-proxy
 
 service:
   type: NodePort
@@ -17,9 +18,3 @@ postgresql:
     size: 0.1Gi
   service:
     port: "5432"
-
-ingress:
-  enabled: false  # TODO: why?
-  hosts:
-    - host: arch.homework
-      paths: ["/auth"]
