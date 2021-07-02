@@ -36,8 +36,13 @@ async def register(
 async def edit_profile(
     schema: ProfileSchema,
     session: AsyncSession = Depends(get_session),
-    session_id: str = Cookie(...),
+    session_id: Optional[str] = Cookie(None),
 ) -> JSONResponse:
+    if not session_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail='Not signed in'
+        )
+
     content: dict = schema.dict()
     content.pop('id')
 
@@ -96,8 +101,13 @@ async def login(
 
 @router.get('/logout', response_class=JSONResponse)
 async def logout(
-    session_id: str = Cookie(...), session: AsyncSession = Depends(get_session)
+    session_id: Optional[str] = Cookie(None), session: AsyncSession = Depends(get_session)
 ) -> JSONResponse:
+    if not session_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail='Not signed in'
+        )
+
     auth_session = await crud.read(
         session, AuthSession, [and_(AuthSession.id == session_id)]
     )
