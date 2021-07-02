@@ -154,5 +154,5 @@ async def auth(
 def signin() -> JSONResponse:
     return JSONResponse(
         {'message': 'Please go to login and provide Login/Password'},
-        status_code=status.HTTP_200_OK,
+        status_code=status.HTTP_401_UNAUTHORIZED,
     )
