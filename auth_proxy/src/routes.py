@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Cookie, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy import and_
@@ -112,14 +114,21 @@ async def logout(
 
 @router.get('/auth', response_class=JSONResponse)
 async def auth(
-    session_id: str = Cookie(...), session: AsyncSession = Depends(get_session)
+    session_id: Optional[str] = Cookie(None), session: AsyncSession = Depends(get_session)
 ) -> JSONResponse:
+    if not session_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail='Not signed in'
+        )
+
     auth_session = await crud.read(
         session, AuthSession, [and_(AuthSession.id == session_id)]
     )
 
     if not auth_session:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Not signed in')
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail='Not signed in'
+        )
 
     headers = {
         'X-UserId': str(auth_session.payload['id']),
@@ -129,3 +138,11 @@ async def auth(
         'X-Last-Name': auth_session.payload['last_name'],
     }
     return JSONResponse(status_code=status.HTTP_200_OK, headers=headers)
+
+
+@router.get('/signin', response_class=JSONResponse)
+def signin() -> JSONResponse:
+    return JSONResponse(
+        {'message': 'Please go to login and provide Login/Password'},
+        status_code=status.HTTP_200_OK,
+    )
