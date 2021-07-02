@@ -122,7 +122,7 @@ async def auth(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Not signed in')
 
     headers = {
-        'X-UserId': auth_session.payload['id'],
+        'X-UserId': str(auth_session.payload['id']),
         'X-User': auth_session.payload['username'],
         'X-Email': auth_session.payload['email'],
         'X-First-Name': auth_session.payload['first_name'],
