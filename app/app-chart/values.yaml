@@ -2,7 +2,8 @@ replicaCount: 2
 
 fullnameOverride: "app"
 
-image: "app:0.1.0"  # TODO: dockerhub
+image:
+  repository: sergeivb/simple-api-gateway-app
 
 service:
   type: NodePort
