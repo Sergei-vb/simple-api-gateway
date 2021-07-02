@@ -27,7 +27,7 @@ def get_profile(request: Request) -> JSONResponse:
         'first_name': request.headers['X-First-Name'],
         'last_name': request.headers['X-Last-Name'],
     }
-    content = ProfileSchema.parse_obj(data).json()
+    content = ProfileSchema.parse_obj(data).dict()
     return JSONResponse(content, status_code=200)
 
 
